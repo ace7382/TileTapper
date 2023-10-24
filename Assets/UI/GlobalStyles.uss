@@ -1,0 +1,40 @@
+.Tile {
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    min-width: 100px;
+    min-height: 100px;
+    flex-shrink: 0;
+    background-color: rgb(255, 255, 255);
+    opacity: 1;
+}
+
+.ProgressBarFont {
+    font-size: 18px;
+    -unity-text-align: middle-center;
+    color: rgb(255, 255, 255);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+}
+
+.PageSizeNew {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    padding-top: 160px;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.TextInputContainer {
+    background-color: rgb(204, 204, 204);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
