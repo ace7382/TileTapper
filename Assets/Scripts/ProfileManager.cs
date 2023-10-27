@@ -11,6 +11,19 @@ public class ProfileManager : MonoBehaviour
 
     #endregion
 
+    #region Inspector Variables
+
+    [SerializeField] private int oneThreshold;
+    [SerializeField] private int twoThreshold;
+    [SerializeField] private int threeThreshold;
+    [SerializeField] private int fourThreshold;
+    [SerializeField] private int fiveThreshold;
+    [SerializeField] private int sixThreshold;
+    [SerializeField] private int sevenThreshold;
+    [SerializeField] private int eightThreshold;
+
+    #endregion
+
     #region Private Variables
 
     private int currentStreak;
@@ -25,9 +38,18 @@ public class ProfileManager : MonoBehaviour
 
     #endregion
 
-    #region Private Properties
+    #region Public Properties
 
-    private int CorrectCount
+    public int OneThresh    { get { return oneThreshold; } }
+    public int TwoThresh    { get { return twoThreshold; } }
+    public int ThreeThresh  { get { return threeThreshold; } }
+    public int FourThresh   { get { return fourThreshold; } }
+    public int FiveThresh   { get { return fiveThreshold; } }
+    public int SixThresh    { get { return sixThreshold; } }
+    public int SevenThresh  { get { return sevenThreshold; } }
+    public int EightThresh  { get { return eightThreshold; } }
+
+    public int CorrectCount
     {
         set
         {
@@ -41,7 +63,7 @@ public class ProfileManager : MonoBehaviour
         }
     }
 
-    private int IncorrectCount
+    public int IncorrectCount
     {
         set
         {
@@ -55,7 +77,7 @@ public class ProfileManager : MonoBehaviour
         }
     }
 
-    private int CurrentStreak
+    public int CurrentStreak
     {
         set
         {
@@ -72,6 +94,16 @@ public class ProfileManager : MonoBehaviour
         {
             return currentStreak;
         }
+    }
+
+    public int BestStreak
+    {
+        get { return bestStreak; }
+    }
+
+    public int TotalGuesses
+    {
+        get { return CorrectCount + IncorrectCount; }
     }
 
     #endregion
@@ -114,8 +146,11 @@ public class ProfileManager : MonoBehaviour
         }
         else
         {
+            int temp            = currentStreak;
             IncorrectCount++;
             CurrentStreak       = 0;
+
+            this.PostNotification(Notifications.STREAK_FAILED, temp);
         }
     }
 
