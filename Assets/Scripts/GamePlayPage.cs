@@ -22,6 +22,9 @@ public class GamePlayPage : Page
     private TimeSpan                    oneSecond                   = new TimeSpan(0, 0, 1);
     private WaitForSeconds              oneSecondWait               = new WaitForSeconds(1f);
 
+    private float                       eventChance;
+    private LayoutEvent                 currentEvent;
+
     #endregion
 
     #region Inherited Functions
@@ -29,6 +32,8 @@ public class GamePlayPage : Page
     public override IEnumerator AnimateIn()
     {
         previousLayouts = new LimitedQueue<List<int>>(10);
+        eventChance     = 0f;
+        currentEvent    = new LayoutEvent();
 
         GetUIReferences();
         ResetGuessButtons();
@@ -118,12 +123,43 @@ public class GamePlayPage : Page
     {
         processingGuess             = null;
 
-        List<VisualElement> temp    = new List<VisualElement>(guessButtons);
+        eventChance                 += Random.Range(1f, 4f); //Takes 25 - 100 turns to trigger an event
 
-        int numOfButtons            = GetNumOfButtons();
+        Debug.Log("EventChance: " + eventChance.ToString());
 
-        while (temp.Count > numOfButtons)
-            temp.RemoveAt(Random.Range(0, temp.Count));
+        if (currentEvent.IsEventOver && eventChance >= 100f)
+        {
+            currentEvent.Init(Random.Range(1, 101));
+        }
+
+        List<VisualElement> temp;
+
+        if (currentEvent.IsEventOver)
+        {
+            temp                    = new List<VisualElement>(guessButtons);
+
+            int numOfButtons        = GetNumOfButtons();
+
+            while (temp.Count > numOfButtons)
+                temp.RemoveAt(Random.Range(0, temp.Count));
+        }
+        else
+        {
+            List<int> eventButtons  = currentEvent.GetNextLayout();
+            temp                    = new List<VisualElement>();
+
+            for (int i = 0; i < eventButtons.Count; i++)
+                temp.Add(guessButtons[eventButtons[i]]);
+
+            if (currentEvent.IsEventOver)
+            {
+                Debug.Log("Event Over, decrementing EventChance");
+
+                eventChance -= currentEvent.EventCounterOffset;
+
+                Debug.Log("Post Event: " + eventChance.ToString());
+            }
+        }
 
         currentCorrectIndex         = guessButtons.IndexOf(temp[Random.Range(0, temp.Count)]);
 
