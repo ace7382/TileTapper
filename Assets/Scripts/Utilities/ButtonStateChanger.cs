@@ -33,7 +33,7 @@ public class ButtonStateChanger
 
     public void OnPointerDown(PointerDownEvent evt)
     {
-        if (ignore)
+        if (Ignore)
             return;
 
         button.style.right  = -4f;
@@ -49,7 +49,7 @@ public class ButtonStateChanger
 
     public void OnPointerUp(PointerUpEvent evt)
     {
-        if (ignore)
+        if (Ignore)
             return;
 
         if (pressed == false)

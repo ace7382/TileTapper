@@ -54,7 +54,6 @@ public class PageManager : MonoBehaviour
 
     private void Start()
     {
-        //StartCoroutine(OpenPageOnAnEmptyStack<MainMenu>());
         StartCoroutine(OpenPageOnAnEmptyStack<GamePlayPage>());
     }
 

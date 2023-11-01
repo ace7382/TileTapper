@@ -191,23 +191,6 @@ public class GamePlayPage : Page
     private int GetNumOfButtons()
     {
         int roll = Random.Range(1, 101);
-
-        //if (roll < 2)
-        //    return 1;
-        //if (roll < 20)
-        //    return 2;
-        //if (roll < 42)
-        //    return 3;
-        //if (roll < 59)
-        //    return 4;
-        //if (roll < 72)
-        //    return 5;
-        //if (roll < 82)
-        //    return 6;
-        //if (roll < 91)
-        //    return 7;
-        //if (roll < 97)
-        //    return 8;
         
         if (roll < ProfileManager.instance.OneThresh)
             return 1;
@@ -246,11 +229,6 @@ public class GamePlayPage : Page
 
     private IEnumerator ButtonSubmitted(VisualElement guessedButton, VisualElement buttonBG)
     {
-        //Debug.Log(string.Format("{0} clicked. {1} is the correct button. {2}"
-        //    , guessedButton.name
-        //    , guessButtons[currentCorrectIndex].name
-        //    , guessedButton == guessButtons[currentCorrectIndex]));
-
         noTapTimer      = new TimeSpan(0, 3, 0);
 
         bool correct    = guessedButton == guessButtons[currentCorrectIndex];
