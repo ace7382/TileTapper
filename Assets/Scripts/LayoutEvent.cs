@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class LayoutEvent
 {
@@ -26,7 +27,7 @@ public class LayoutEvent
     {
         get
         {
-            if (additionalCorrectChance.Count == 0)
+            if (currentIndex >= additionalCorrectChance.Count)
             {
                 return 0f;
             }
@@ -66,7 +67,7 @@ public class LayoutEvent
 
         Debug.Log("Event triggered");
 
-        if (choice < 999f) //OuterRim
+        if (choice < 50f) //OuterRim
         {
             layouts = new List<List<int>>()
             {
@@ -80,9 +81,43 @@ public class LayoutEvent
                 ,   new List<int>() { 3, 0, 1 }
             };
 
-            additionalCorrectChance = new List<float>();
+            additionalCorrectChance = new List<float>()
+            {
+                    10f
+                ,   10f
+                ,   10f
+                ,   10f
+                ,   10f
+                ,   10f
+                ,   10f
+                ,   10f
+            };
 
             eventCounterOffset = 100f;
+        }
+        else //5 Always Corrects
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                int numOfButtons    = Random.Range(1, 10);
+                List<int> buttons   = new List<int>();
+
+                for (int j = 1; j <= numOfButtons; j++)
+                {
+                    buttons.Add(Random.Range(0, 9));
+                }
+
+                layouts.Add(buttons.Distinct<int>().ToList());
+            }
+
+            additionalCorrectChance = new List<float>()
+            {
+                    100f
+                ,   100f
+                ,   100f
+                ,   100f
+                ,   100f
+            };
         }
 
         return this;

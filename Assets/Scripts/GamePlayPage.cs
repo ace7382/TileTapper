@@ -25,21 +25,25 @@ public class GamePlayPage : Page
     private float                       eventChance;
     private LayoutEvent                 currentEvent;
 
+    private float                       autoCorrectChance;
+
     #endregion
 
     #region Inherited Functions
 
     public override IEnumerator AnimateIn()
     {
-        previousLayouts = new LimitedQueue<List<int>>(10);
-        eventChance     = 0f;
-        currentEvent    = new LayoutEvent();
+        previousLayouts     = new LimitedQueue<List<int>>(10);
+        eventChance         = 0f;
+        currentEvent        = new LayoutEvent();
+
+        autoCorrectChance   = 0f;
 
         GetUIReferences();
         ResetGuessButtons();
 
-        noTapTimer      = new TimeSpan(0, 3, 0);
-        playTimer       = new TimeSpan(0, 0, 0);
+        noTapTimer          = new TimeSpan(0, 3, 0);
+        playTimer           = new TimeSpan(0, 0, 0);
 
         PageManager.instance.StartCoroutine(NoTapsFor3Minutes());
         PageManager.instance.StartCoroutine(PlayTimer());
@@ -232,7 +236,6 @@ public class GamePlayPage : Page
 
         VisualElement button    = evt.currentTarget as VisualElement;
 
-        //if (guessButtonStateChangers[guessButtons.IndexOf(button)].Ignore)
         if (guessButtonStateChangers[(int)button.userData].Ignore)
             return;
 
@@ -251,6 +254,39 @@ public class GamePlayPage : Page
         noTapTimer      = new TimeSpan(0, 3, 0);
 
         bool correct    = guessedButton == guessButtons[currentCorrectIndex];
+
+        //Debug.Log("Incorrect Tile Chosen. Auto Correct Chance: " + autoCorrectChance.ToString());
+        //Debug.Log("AC + Event AC == " + (autoCorrectChance + currentEvent.AdditionalChance).ToString());
+
+        if (!correct)
+        {
+            float rand = Random.Range(0f, 100f);
+
+            if (rand <= currentEvent.AdditionalChance + autoCorrectChance)
+            {
+                Debug.Log(string.Format(
+                    "Triggered auto correct. {0} + {1} >= {2}: "
+                    , autoCorrectChance.ToString()
+                    , currentEvent.AdditionalChance.ToString()
+                    , rand.ToString()
+                ));
+
+                correct             = true;
+                autoCorrectChance   = Mathf.Clamp(autoCorrectChance - rand, 0f, 100f);
+            }
+
+            //if (autoCorrectChance >= 100f)
+            //{
+            //    correct             = true;
+            //    autoCorrectChance   -= 100f;
+            //}
+            //else if (autoCorrectChance + currentEvent.AdditionalChance >= 100f)
+            //{
+            //    correct             = true;
+            //}
+        }
+
+        autoCorrectChance += Random.Range(.5f, 25f);
 
         buttonBG.SetColor(correct ? Color.green : Color.red);
 
