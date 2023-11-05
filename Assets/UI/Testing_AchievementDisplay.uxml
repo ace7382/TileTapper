@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=61e27fa2bacfd4e538243262a08f5bf0&amp;type=3#GlobalStyles" />
+    <ui:VisualElement name="Page" class="PageSizeNew" style="justify-content: flex-start; align-items: flex-end; padding-top: 375px; padding-bottom: 175px;">
+        <ui:Label tabindex="-1" text="Tap a Tile" display-tooltip-when-elided="true" name="Locked" style="-unity-font: url(&apos;project://database/Assets/UI/Quicksand-Bold.ttf?fileID=12800000&amp;guid=b1e2f9316ab78465a9767471cb4244f6&amp;type=3#Quicksand-Bold&apos;); font-size: 100px; -unity-font-definition: initial; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+        <ui:Label tabindex="-1" text="Tap a Tile" display-tooltip-when-elided="true" name="Unlocked" style="-unity-font: url(&apos;project://database/Assets/UI/Quicksand-Bold.ttf?fileID=12800000&amp;guid=b1e2f9316ab78465a9767471cb4244f6&amp;type=3#Quicksand-Bold&apos;); font-size: 100px; -unity-font-definition: initial; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

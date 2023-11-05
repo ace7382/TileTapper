@@ -101,8 +101,6 @@ public class GamePlayPage : Page
             , uiDoc.rootVisualElement.Q<Label>("IncorrectGuesses")
         );
 
-        ProfileManager.instance.ResetStats();
-
         VisualElement p             = uiDoc.rootVisualElement.Q<VisualElement>("Page"); //TODO: move this to the top and any uidoc.root refs can probably be p refs
 
         for (int i = 0; i < guessButtons.Count; i++)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5c757d8dc36e64ea4684f0ddfd6336, type: 3}
   m_Name: Correct - 10
   m_EditorClassIdentifier: 
-  id: 
+  id: 0
   description: 
   icon: {fileID: 0}
   isComplete: 0

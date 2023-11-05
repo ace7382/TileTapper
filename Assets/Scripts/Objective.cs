@@ -45,6 +45,17 @@ public abstract class Objective : ScriptableObject
 
     #region Public Functions
 
+    public void SetID(string newId)
+    {
+        if (Application.isPlaying)
+        {
+            Debug.Log("This is an editor script. Do not run in play mode");
+            return;
+        }
+
+        id = newId;
+    }
+
     public virtual void Reset()
     {
         isComplete      = false;
@@ -53,6 +64,7 @@ public abstract class Objective : ScriptableObject
     public void OnComplete()
     {
         ObjectiveManager.instance.MarkAsComplete(this);
+        ProfileManager.instance.UpdateSaveGameOnObjectiveComplete(this);
 
         Debug.Log("Objective Complete " + name);
     }

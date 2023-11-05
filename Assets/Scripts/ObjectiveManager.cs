@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,25 +9,27 @@ public class ObjectiveManager : MonoBehaviour
 {
     #region Singleton
 
-    public static ObjectiveManager instance;
+    public static ObjectiveManager              instance;           
 
     #endregion
 
     #region Inspector Variables
 
-    [SerializeField] private List<Objective> objectives;
+    [SerializeField] private List<Objective>    objectives;
 
     #endregion
 
     #region Private Variables
 
-    private List<Objective> completeObjectives;
+    private int                                 totalObjectiveCount;
+    private List<Objective>                     completeObjectives;
 
     #endregion
 
     #region Public Properties
 
-    public int CompletedObjectivesCount { get { return completeObjectives.Count; } }
+    public int                                  CompletedObjectivesCount    { get { return completeObjectives.Count; } }
+    public int                                  TotalObjectives             { get { return totalObjectiveCount; } }
 
     #endregion
 
@@ -39,11 +42,13 @@ public class ObjectiveManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
 
-        completeObjectives = new List<Objective>();
+        totalObjectiveCount     = objectives.Count;
 
-        for (int i = 0; i < objectives.Count; i++)
-            if (objectives[i].IsComplete)
-                MarkAsComplete(objectives[i]);
+        completeObjectives      = new List<Objective>();
+
+        //for (int i = 0; i < objectives.Count; i++)
+        //    if (objectives[i].IsComplete)
+        //        MarkAsComplete(objectives[i]);
     }
 
     private void OnEnable()
@@ -72,10 +77,27 @@ public class ObjectiveManager : MonoBehaviour
         }
     }
 
+    public void UpdateObjectivesBasedOnSaveData(SaveFile saveData)
+    {
+        for (int i = 0; i < saveData.Objectives.Count; i++)
+        {
+            if (!String.IsNullOrEmpty(saveData.Objectives[i]))
+                MarkAsComplete(saveData.Objectives[i]);
+        }
+    }
+
     public void MarkAsComplete(Objective o)
     {
         objectives.Remove(o);
         completeObjectives.Add(o);
+    }
+
+    public void MarkAsComplete(string objectiveID)
+    {
+        Objective o = objectives.Find(x => x.ID == objectiveID);
+
+        if (o != null)
+            MarkAsComplete(o);
     }
 
     public void InstructionsTapped(UnityEngine.UIElements.ClickEvent evt)
@@ -226,6 +248,17 @@ public class ObjectiveManager : MonoBehaviour
         }
 
         GameObject.FindObjectOfType<ObjectiveManager>().objectives = Resources.LoadAll<Objective>("Objectives").ToList();
+    }
+
+    [MenuItem("Dev Commands/Number Objectives")]
+    public static void NumberAllObjectives()
+    {
+        List<Objective> objs = Resources.LoadAll<Objective>("Objectives").ToList();
+
+        for (int i = 0; i < objs.Count; i++)
+        {
+            objs[i].SetID(i.ToString());
+        }
     }
 
     [MenuItem("Dev Commands/Reset Objectives")]

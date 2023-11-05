@@ -2,39 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Apple.GameKit;
+using System.Threading.Tasks;
+using System;
+using System.IO;
+using UnityEditor;
 
 public class ProfileManager : MonoBehaviour
 {
     #region Singleton
 
-    public static ProfileManager instance;
+    public static ProfileManager    instance;
+
+    #endregion
+
+    #region Consts
+
+    private const string            saveDirectory           = "/SaveData/";
+    private const string            fileName                = "abc.sav";
 
     #endregion
 
     #region Inspector Variables
 
-    [SerializeField] private int oneThreshold;
-    [SerializeField] private int twoThreshold;
-    [SerializeField] private int threeThreshold;
-    [SerializeField] private int fourThreshold;
-    [SerializeField] private int fiveThreshold;
-    [SerializeField] private int sixThreshold;
-    [SerializeField] private int sevenThreshold;
-    [SerializeField] private int eightThreshold;
+    [SerializeField] private int    oneThreshold;
+    [SerializeField] private int    twoThreshold;
+    [SerializeField] private int    threeThreshold;
+    [SerializeField] private int    fourThreshold;
+    [SerializeField] private int    fiveThreshold;
+    [SerializeField] private int    sixThreshold;
+    [SerializeField] private int    sevenThreshold;
+    [SerializeField] private int    eightThreshold;
 
     #endregion
 
     #region Private Variables
 
-    private int currentStreak;
-    private int bestStreak;
-    private int correctCount;
-    private int incorrectCount;
+    private int                     currentStreak;
+    private int                     bestStreak;
+    private int                     correctCount;
+    private int                     incorrectCount;
 
-    private Label currentStreakLabel;
-    private Label bestStreakLabel;
-    private Label correctLabel;
-    private Label incorrectLabel;
+    private Label                   currentStreakLabel;
+    private Label                   bestStreakLabel;
+    private Label                   correctLabel;
+    private Label                   incorrectLabel;
+
+    private GKLocalPlayer           gameKit_playerProfile;
+
+    private SaveFile                saveData;
 
     #endregion
 
@@ -98,6 +114,12 @@ public class ProfileManager : MonoBehaviour
 
     public int BestStreak
     {
+        private set
+        {
+            bestStreak              = value;
+            bestStreakLabel.text    = bestStreak.ToString();
+        }
+
         get { return bestStreak; }
     }
 
@@ -116,6 +138,33 @@ public class ProfileManager : MonoBehaviour
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
+
+        if (!LoadGame())
+            saveData = new SaveFile();
+    }
+
+    private async Task Start()
+    {
+        //This is set here (instead of in load) because the UI will be linked at this point
+        CurrentStreak   = saveData.Current;
+        BestStreak      = saveData.Best;
+        CorrectCount    = saveData.Correct;
+        IncorrectCount  = saveData.Incorrect;
+
+        try
+        {
+            gameKit_playerProfile = await GKLocalPlayer.Authenticate();
+
+            if (gameKit_playerProfile != null)
+            {
+                GKAccessPoint.Shared.Location = GKAccessPoint.GKAccessPointLocation.TopLeading;
+                GKAccessPoint.Shared.IsActive = true;
+            }
+        }
+        catch
+        {
+            Debug.Log("Error signing into gamecenter");
+        }
     }
 
     #endregion
@@ -152,6 +201,78 @@ public class ProfileManager : MonoBehaviour
 
             this.PostNotification(Notifications.STREAK_FAILED, temp);
         }
+
+        SaveGame();
+    }
+
+    public void UpdateSaveGameOnObjectiveComplete(Objective obj)
+    {
+        saveData.Objectives.Add(obj.ID);
+
+        SaveGame();
+    }
+
+    #endregion
+
+    #region Private Functions
+
+    private void SaveGame()
+    {
+        string dir              = Application.persistentDataPath + saveDirectory;
+
+        if (!Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        saveData.Current        = currentStreak;
+        saveData.Best           = bestStreak;
+        saveData.Correct        = correctCount;
+        saveData.Incorrect      = incorrectCount;
+
+        string json             = JsonUtility.ToJson(saveData, true);
+
+        File.WriteAllText(dir + fileName, json);
+    }
+
+    private bool LoadGame()
+    {
+        string filePath         = Application.persistentDataPath + saveDirectory + fileName;
+
+        if (File.Exists(filePath))
+        {
+            string json         = File.ReadAllText(filePath);
+
+            saveData            = JsonUtility.FromJson<SaveFile>(json);
+
+            ObjectiveManager.instance.UpdateObjectivesBasedOnSaveData(saveData);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    #endregion
+
+    #region Editor Functions
+
+    [MenuItem("Dev Commands/Delete Save File")]
+    public static void DeleteSaveFile()
+    {
+        if (Application.isPlaying)
+        {
+            Debug.LogWarning("Editor is in Playmode. This function cannot be used");
+            return;
+        }
+
+        string filepath         = Application.persistentDataPath + saveDirectory + fileName;
+
+        if (!File.Exists(filepath))
+        {
+            Debug.Log("Save File not found at " + filepath);
+            return;
+        }
+
+        File.Delete(filepath);
     }
 
     #endregion
