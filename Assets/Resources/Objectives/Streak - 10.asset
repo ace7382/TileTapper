@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b756963d08a73c42976f63083289610, type: 3}
   m_Name: Streak - 10
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 23
   isComplete: 0
   goal: 10

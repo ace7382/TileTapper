@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba522a709374194d953a78b946b0681, type: 3}
   m_Name: Specific - 20 Minutes
   m_EditorClassIdentifier: 
-  id: 
-  description: Tap the Instructions
-  icon: {fileID: 0}
+  id: 30
   isComplete: 0

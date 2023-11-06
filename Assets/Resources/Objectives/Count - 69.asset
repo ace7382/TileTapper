@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26ada8b66b5ef84ab227742d046f279, type: 3}
   m_Name: Count - 69
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 36
   isComplete: 0
   goalCounts: 0600000009000000

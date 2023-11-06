@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae7d40c75af18447848642313a45766, type: 3}
   m_Name: CorrectCount - Correct 9
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 33
   isComplete: 0
   correct: 1
   numOfTiles: 9

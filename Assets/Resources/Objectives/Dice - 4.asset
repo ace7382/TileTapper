@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9e609d2b7f4ff74ba1b4bcdb0a643e8, type: 3}
   m_Name: Dice - 4
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 44
   isComplete: 0
   goalLayout: 00000000020000000600000008000000

@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba522a709374194d953a78b946b0681, type: 3}
   m_Name: Specific - No Taps for 3 Minutes
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 31
   isComplete: 0

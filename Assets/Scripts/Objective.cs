@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using Achievement = Apple.GameKit.GKAchievement;
 
 public abstract class Objective : ScriptableObject
 {
     #region Inspector Variables
 
     [SerializeField] protected string           id;
-    [SerializeField] protected string           description;
-    [SerializeField] protected Texture2D        icon;
+    //[SerializeField] protected string           description;
+    //[SerializeField] protected Texture2D        icon;
 
     #endregion
 
@@ -32,8 +35,8 @@ public abstract class Objective : ScriptableObject
     }
 
     public string           ID                  { get { return id; } }
-    public string           Description         { get { return description; } }
-    public Texture2D        Icon                { get { return icon; } }
+    //public string           Description         { get { return description; } }
+    //public Texture2D        Icon                { get { return icon; } }
 
     #endregion
 
@@ -67,6 +70,36 @@ public abstract class Objective : ScriptableObject
         ProfileManager.instance.UpdateSaveGameOnObjectiveComplete(this);
 
         Debug.Log("Objective Complete " + name);
+
+        if (ProfileManager.instance.GKPlayer)
+        {
+            UnlockGameCenterAchievement();
+        }
+    }
+
+    public async void UnlockGameCenterAchievement()
+    {
+        string achievementID                = ID;
+        int progressPercent                 = 100;
+        bool showCompletionToast            = true;
+
+        var allAchievements                 = await Achievement.LoadAchievements();
+
+        Achievement gkAchievement           = allAchievements.FirstOrDefault(x => x.Identifier == achievementID);
+
+        if (gkAchievement == null)
+        {
+            gkAchievement                   = Achievement.Init(achievementID);
+        }
+
+        if (!gkAchievement.IsCompleted)
+        {
+            gkAchievement.PercentComplete   = progressPercent;
+            gkAchievement
+                .ShowCompletionBanner       = showCompletionToast;
+
+            await Achievement.Report(gkAchievement);
+        }
     }
 
     #endregion

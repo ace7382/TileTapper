@@ -65,6 +65,8 @@ public class ProfileManager : MonoBehaviour
     public int SevenThresh  { get { return sevenThreshold; } }
     public int EightThresh  { get { return eightThreshold; } }
 
+    public bool GKPlayer    { get { return gameKit_playerProfile != null; } }
+
     public int CorrectCount
     {
         set
@@ -159,6 +161,8 @@ public class ProfileManager : MonoBehaviour
             {
                 GKAccessPoint.Shared.Location = GKAccessPoint.GKAccessPointLocation.TopLeading;
                 GKAccessPoint.Shared.IsActive = true;
+
+                await CheckAchievementProgress();
             }
         }
         catch
@@ -249,6 +253,17 @@ public class ProfileManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private async Task CheckAchievementProgress()
+    {
+        var achievements = await GKAchievement.LoadAchievements();
+
+        for (int i = 0; i < achievements.Count; i++)
+        {
+            if (achievements[i].IsCompleted)
+                ObjectiveManager.instance.UpdateObjectivesBasedOnGKAchievements(achievements[i]);
+        }
     }
 
     #endregion

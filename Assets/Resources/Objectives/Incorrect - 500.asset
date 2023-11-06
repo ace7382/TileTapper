@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5c757d8dc36e64ea4684f0ddfd6336, type: 3}
   m_Name: Incorrect - 500
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 12
   isComplete: 0
   type: 1
   neededAmount: 500

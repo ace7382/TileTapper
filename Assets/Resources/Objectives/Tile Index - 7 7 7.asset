@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9e609d2b7f4ff74ba1b4bcdb0a643e8, type: 3}
-  m_Name: Dice - 6
+  m_Script: {fileID: 11500000, guid: c8f54de1f5fce844ebd0af23ad5c4c4b, type: 3}
+  m_Name: Tile Index - 7 7 7
   m_EditorClassIdentifier: 
-  id: 46
+  id: 49
   isComplete: 0
-  goalLayout: 000000000200000003000000050000000600000008000000
+  goalOrder: 060000000600000006000000
+  tileRepeater: 0

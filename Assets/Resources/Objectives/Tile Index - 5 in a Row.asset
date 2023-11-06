@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8f54de1f5fce844ebd0af23ad5c4c4b, type: 3}
   m_Name: Tile Index - 5 in a Row
   m_EditorClassIdentifier: 
-  id: 
-  description: 
-  icon: {fileID: 0}
+  id: 48
   isComplete: 0
   goalOrder: 0000000000000000000000000000000000000000
   tileRepeater: 1

@@ -86,6 +86,17 @@ public class ObjectiveManager : MonoBehaviour
         }
     }
 
+    public void UpdateObjectivesBasedOnGKAchievements(Apple.GameKit.GKAchievement achievement)
+    {
+        Objective obj = objectives.Find(x => x.ID == achievement.Identifier);
+
+        if (obj != null)
+        {
+            ProfileManager.instance.UpdateSaveGameOnObjectiveComplete(obj);
+            MarkAsComplete(obj);
+        }
+    }
+
     public void MarkAsComplete(Objective o)
     {
         objectives.Remove(o);
@@ -250,16 +261,16 @@ public class ObjectiveManager : MonoBehaviour
         GameObject.FindObjectOfType<ObjectiveManager>().objectives = Resources.LoadAll<Objective>("Objectives").ToList();
     }
 
-    [MenuItem("Dev Commands/Number Objectives")]
-    public static void NumberAllObjectives()
-    {
-        List<Objective> objs = Resources.LoadAll<Objective>("Objectives").ToList();
+    //[MenuItem("Dev Commands/Number Objectives")]
+    //public static void NumberAllObjectives()
+    //{
+    //    List<Objective> objs = Resources.LoadAll<Objective>("Objectives").ToList();
 
-        for (int i = 0; i < objs.Count; i++)
-        {
-            objs[i].SetID(i.ToString());
-        }
-    }
+    //    for (int i = 0; i < objs.Count; i++)
+    //    {
+    //        objs[i].SetID(i.ToString());
+    //    }
+    //}
 
     [MenuItem("Dev Commands/Reset Objectives")]
     public static void ResetAllObjectives()
