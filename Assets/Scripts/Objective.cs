@@ -73,7 +73,12 @@ public abstract class Objective : ScriptableObject
 
         if (ProfileManager.instance.GKPlayer)
         {
-            UnlockGameCenterAchievement();
+            Debug.Log("Signed into Game Center. Need to unlock achivement now");
+            //UnlockGameCenterAchievement();
+
+            //Task.Run(() => UnlockGameCenterAchievement());
+
+            //Task.WaitAll(UnlockGameCenterAchievement());
         }
     }
 
@@ -83,22 +88,33 @@ public abstract class Objective : ScriptableObject
         int progressPercent                 = 100;
         bool showCompletionToast            = true;
 
+        Debug.Log("pre load");
+
         var allAchievements                 = await Achievement.LoadAchievements();
+
+        Debug.Log("Achievements loaded");
+        Debug.Log(allAchievements.Count);
 
         Achievement gkAchievement           = allAchievements.FirstOrDefault(x => x.Identifier == achievementID);
 
         if (gkAchievement == null)
         {
+            Debug.Log("Here");
+
             gkAchievement                   = Achievement.Init(achievementID);
         }
 
         if (!gkAchievement.IsCompleted)
         {
+            Debug.Log("Now Here");
+
             gkAchievement.PercentComplete   = progressPercent;
             gkAchievement
                 .ShowCompletionBanner       = showCompletionToast;
 
             await Achievement.Report(gkAchievement);
+
+            Debug.Log("Done");
         }
     }
 
