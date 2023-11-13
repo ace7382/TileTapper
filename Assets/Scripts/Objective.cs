@@ -73,12 +73,7 @@ public abstract class Objective : ScriptableObject
 
         if (ProfileManager.instance.GKPlayer)
         {
-            Debug.Log("Signed into Game Center. Need to unlock achivement now");
-            //UnlockGameCenterAchievement();
-
-            //Task.Run(() => UnlockGameCenterAchievement());
-
-            //Task.WaitAll(UnlockGameCenterAchievement());
+            Task.Run(() => UnlockGameCenterAchievement());
         }
     }
 

@@ -260,37 +260,19 @@ public class ProfileManager : MonoBehaviour
 
     private async Task CheckAchievementProgress()
     {
-        Debug.Log("$$$$$$$$$$$Here. Waiting 6s....");
+        //Debug.Log("$$$$$$$$$$$Here. Waiting 6s....");
 
-        await Task.Delay(new TimeSpan(0, 0, 6));
+        //await Task.Delay(new TimeSpan(0, 0, 6));
 
-        Debug.Log("$$$$$$$$$$Wait complete");
-
-        //GKAchievement a = GKAchievement.Init("0");
-
-        //Debug.Log(string.Format(
-        //    "+--------------------------+\n" +
-        //    "| Identifier: {0}\n" +
-        //    "| IsComplete: {1}\n" +
-        //    "+--------------------------+",
-        //    a.Identifier, a.IsCompleted));
-
-        //var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Default);
-        //await gameCenter.Present();
-
-        //Debug.Log("$$$$$$$$$$$$$game center view showing");
-
-        //Apple.Core.Runtime.NSArray<GKAchievementDescription> achievements = await GKAchievementDescription.LoadAchievementDescriptions();
+        //Debug.Log("$$$$$$$$$$Wait complete");
 
         var achievements = await GKAchievement.LoadAchievements();
 
-        Debug.Log("$$$$$$$$$$$$$ach count:" + achievements.Count.ToString());
-
-        //for (int i = 0; i < achievements.Count; i++)
-        //{
-        //    if (achievements[i].IsCompleted)
-        //        ObjectiveManager.instance.UpdateObjectivesBasedOnGKAchievements(achievements[i]);
-        //}
+        for (int i = 0; i < achievements.Count; i++)
+        {
+            if (achievements[i].IsCompleted)
+                ObjectiveManager.instance.UpdateObjectivesBasedOnGKAchievements(achievements[i]);
+        }
     }
 
     #endregion

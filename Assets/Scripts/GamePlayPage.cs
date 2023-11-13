@@ -262,7 +262,7 @@ public class GamePlayPage : Page
             //}
         }
 
-        autoCorrectChance += Random.Range(.5f, 25f);
+        autoCorrectChance += Random.Range(.2f, 18f);
 
         buttonBG.SetColor(correct ? Color.green : Color.red);
 
