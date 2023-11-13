@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using Achievement = Apple.GameKit.GKAchievement;
 
 public class ObjectiveManager : MonoBehaviour
 {
@@ -138,6 +140,27 @@ public class ObjectiveManager : MonoBehaviour
 
         if (obj != null)
             obj.OnComplete();
+    }
+
+    public async Task CheckAllGameCenterAchievments()
+    {
+        var allAchievements = await Achievement.LoadAchievements();
+
+        for (int i = 0; i < completeObjectives.Count; i++)
+        {
+            Achievement ach = allAchievements.FirstOrDefault(x => x.Identifier == completeObjectives[i].ID);
+
+            if (ach == null)
+                ach = Achievement.Init(completeObjectives[i].ID);
+
+            if (!ach.IsCompleted)
+            {
+                ach.PercentComplete         = 100f;
+                ach.ShowCompletionBanner    = true;
+
+                await Achievement.Report(ach);
+            }
+        }
     }
 
     #endregion

@@ -34,6 +34,18 @@ public class ProfileManager : MonoBehaviour
     [SerializeField] private int    sevenThreshold;
     [SerializeField] private int    eightThreshold;
 
+    [Space]
+
+    [Header("Event Thresholds")]
+    [SerializeField] public int     OuterRim;
+    [SerializeField] public int     Cols;
+    [SerializeField] public int     Rows;
+    [SerializeField] public int     Unlucky;
+    [SerializeField] public int     Dice;
+    [SerializeField] public int     Lucky7s;
+    [SerializeField] public int     InARow;
+    [SerializeField] public int     FiveXFive;
+
     #endregion
 
     #region Private Variables

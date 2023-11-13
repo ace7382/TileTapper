@@ -160,6 +160,14 @@ MonoBehaviour:
   sixThreshold: 82
   sevenThreshold: 91
   eightThreshold: 97
+  OuterRim: 15
+  Cols: 30
+  Rows: 45
+  Unlucky: 47
+  Dice: 65
+  Lucky7s: 70
+  InARow: 75
+  FiveXFive: 80
 --- !u!4 &87806443
 Transform:
   m_ObjectHideFlags: 0

@@ -125,7 +125,7 @@ public class GamePlayPage : Page
     {
         processingGuess             = null;
 
-        eventChance                 += Random.Range(1f, 4f); //Takes 25 - 100 turns to trigger an event
+        eventChance                 += Random.Range(2.5f, 5f); //Takes 20 - 40 turns to trigger an event
 
         Debug.Log("EventChance: " + eventChance.ToString());
 
@@ -157,7 +157,7 @@ public class GamePlayPage : Page
             {
                 Debug.Log("Event Over, decrementing EventChance");
 
-                eventChance -= currentEvent.EventCounterOffset;
+                eventChance = Mathf.Clamp(eventChance -currentEvent.EventCounterOffset, 0f, 100f);
 
                 Debug.Log("Post Event: " + eventChance.ToString());
             }
@@ -231,10 +231,11 @@ public class GamePlayPage : Page
 
         bool correct    = guessedButton == guessButtons[currentCorrectIndex];
 
-        //Debug.Log("Incorrect Tile Chosen. Auto Correct Chance: " + autoCorrectChance.ToString());
-        //Debug.Log("AC + Event AC == " + (autoCorrectChance + currentEvent.AdditionalChance).ToString());
-
-        if (!correct)
+        if (currentEvent.AdditionalChance < 0)
+        { 
+            correct     = false;
+        }
+        else if (!correct)
         {
             float rand = Random.Range(0f, 100f);
 
@@ -250,16 +251,6 @@ public class GamePlayPage : Page
                 correct             = true;
                 autoCorrectChance   = Mathf.Clamp(autoCorrectChance - rand, 0f, 100f);
             }
-
-            //if (autoCorrectChance >= 100f)
-            //{
-            //    correct             = true;
-            //    autoCorrectChance   -= 100f;
-            //}
-            //else if (autoCorrectChance + currentEvent.AdditionalChance >= 100f)
-            //{
-            //    correct             = true;
-            //}
         }
 
         autoCorrectChance += Random.Range(.2f, 18f);
