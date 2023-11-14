@@ -94,15 +94,11 @@ public abstract class Objective : ScriptableObject
 
         if (gkAchievement == null)
         {
-            Debug.Log("Here");
-
             gkAchievement                   = Achievement.Init(achievementID);
         }
 
         if (!gkAchievement.IsCompleted)
         {
-            Debug.Log("Now Here");
-
             gkAchievement.PercentComplete   = progressPercent;
             gkAchievement
                 .ShowCompletionBanner       = showCompletionToast;
