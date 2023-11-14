@@ -27,6 +27,13 @@ public class GamePlayPage : Page
 
     private float                       autoCorrectChance;
 
+    private VisualElement               musicButton;
+    private VisualElement               sfxButton;
+    private VisualElement               gameCenterButton;
+    private ButtonStateChanger          musicButtonStateChanger;
+    private ButtonStateChanger          sfxButtonStateChanger;
+    private ButtonStateChanger          gameCenterButtonStateChanger;
+
     #endregion
 
     #region Inherited Functions
@@ -58,13 +65,6 @@ public class GamePlayPage : Page
 
     public override void HidePage()
     {
-        for (int i = 0; i < guessButtons.Count; i++)
-        {
-            //guessButtons[i].UnregisterCallback<PointerDownEvent>(GuessButtonDown);
-            //guessButtons[i].UnregisterCallback<PointerUpEvent>(GuessButtonUp);
-            //guessButtons[i].UnregisterCallback<PointerLeaveEvent>(GuessButtonOff);
-        }
-
         uiDoc.rootVisualElement.Q<Label>("Instructions").UnregisterCallback<ClickEvent>(ObjectiveManager.instance.InstructionsTapped);
     }
 
@@ -79,10 +79,10 @@ public class GamePlayPage : Page
 
     private void GetUIReferences()
     {
-        processingPause             = new WaitForSeconds(.175f);
+        processingPause                 = new WaitForSeconds(.175f);
 
-        guessButtons                = new List<VisualElement>();
-        guessButtonStateChangers    = new List<ButtonStateChanger>();
+        guessButtons                    = new List<VisualElement>();
+        guessButtonStateChangers        = new List<ButtonStateChanger>();
 
         guessButtons.Add(uiDoc.rootVisualElement.Q<VisualElement>("Button1_1"));
         guessButtons.Add(uiDoc.rootVisualElement.Q<VisualElement>("Button1_2"));
@@ -101,14 +101,14 @@ public class GamePlayPage : Page
             , uiDoc.rootVisualElement.Q<Label>("IncorrectGuesses")
         );
 
-        VisualElement p             = uiDoc.rootVisualElement.Q<VisualElement>("Page"); //TODO: move this to the top and any uidoc.root refs can probably be p refs
+        VisualElement p                 = uiDoc.rootVisualElement.Q<VisualElement>("Page"); //TODO: move this to the top and any uidoc.root refs can probably be p refs
 
         for (int i = 0; i < guessButtons.Count; i++)
         {
-            ButtonStateChanger bsc = new ButtonStateChanger(guessButtons[i].Q<VisualElement>("BG"));
+            ButtonStateChanger bsc      = new ButtonStateChanger(guessButtons[i].Q<VisualElement>("BG"));
             guessButtonStateChangers.Add(bsc);
 
-            guessButtons[i].userData = i;
+            guessButtons[i].userData    = i;
 
             guessButtons[i].RegisterCallback<PointerDownEvent>(guessButtonStateChangers[i].OnPointerDown);
             guessButtons[i].RegisterCallback<ClickEvent>(GuessButtonClicked);
@@ -117,8 +117,38 @@ public class GamePlayPage : Page
             p.RegisterCallback<PointerLeaveEvent>(guessButtonStateChangers[i].OnPointerOff);
         }
 
-        Label instructions = p.Q<Label>("Instructions");
+        Label instructions              = p.Q<Label>("Instructions");
         instructions.RegisterCallback<ClickEvent>(ObjectiveManager.instance.InstructionsTapped);
+
+        //Bottom Buttons
+        sfxButton                       = p.Q<VisualElement>("SFXButton");
+        musicButton                     = p.Q<VisualElement>("MusicButton");
+        gameCenterButton                = p.Q<VisualElement>("GameCenterButton");
+
+        sfxButtonStateChanger           = new ButtonStateChanger(sfxButton.Q<VisualElement>("BG"));
+        musicButtonStateChanger         = new ButtonStateChanger(musicButton.Q<VisualElement>("BG"));
+        gameCenterButtonStateChanger    = new ButtonStateChanger(gameCenterButton.Q<VisualElement>("BG"));
+
+        p.RegisterCallback<PointerUpEvent>(sfxButtonStateChanger.OnPointerUp);
+        p.RegisterCallback<PointerUpEvent>(musicButtonStateChanger.OnPointerUp);
+        p.RegisterCallback<PointerUpEvent>(gameCenterButtonStateChanger.OnPointerUp);
+        p.RegisterCallback<PointerLeaveEvent>(sfxButtonStateChanger.OnPointerOff);
+        p.RegisterCallback<PointerLeaveEvent>(musicButtonStateChanger.OnPointerOff);
+        p.RegisterCallback<PointerLeaveEvent>(gameCenterButtonStateChanger.OnPointerOff);
+
+        sfxButton.RegisterCallback<PointerDownEvent>(sfxButtonStateChanger.OnPointerDown);
+        musicButton.RegisterCallback<PointerDownEvent>(musicButtonStateChanger.OnPointerDown);
+        gameCenterButton.RegisterCallback<PointerDownEvent>(gameCenterButtonStateChanger.OnPointerDown);
+
+        sfxButton.RegisterCallback<ClickEvent>((evt) =>
+        {
+            sfxButton.Q<VisualElement>("Icon").SetImage(SoundManager.instance.ToggleSFX());
+        });
+
+        musicButton.RegisterCallback<ClickEvent>((evt) =>
+        {
+            musicButton.Q<VisualElement>("Icon").SetImage(SoundManager.instance.ToggleMusic());
+        });
     }
 
     private void ResetGuessButtons()
@@ -223,6 +253,8 @@ public class GamePlayPage : Page
         processingGuess         = ButtonSubmitted(button, button.Q<VisualElement>("BG"));
 
         PageManager.instance.StartCoroutine(processingGuess);
+
+        SoundManager.instance.PlayClickSound();
     }
 
     private IEnumerator ButtonSubmitted(VisualElement guessedButton, VisualElement buttonBG)
