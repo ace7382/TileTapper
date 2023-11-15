@@ -110,7 +110,18 @@ public class GamePlayPage : Page
 
             guessButtons[i].userData    = i;
 
-            guessButtons[i].RegisterCallback<PointerDownEvent>(guessButtonStateChangers[i].OnPointerDown);
+            //guessButtons[i].RegisterCallback<PointerDownEvent>(guessButtonStateChangers[i].OnPointerDown);
+
+            int temp                    = i;
+
+            guessButtons[temp].RegisterCallback<PointerDownEvent>((evt) =>
+            {
+                if (processingGuess != null)
+                    return;
+
+                guessButtonStateChangers[temp].OnPointerDown(evt);
+            });
+
             guessButtons[i].RegisterCallback<ClickEvent>(GuessButtonClicked);
 
             p.RegisterCallback<PointerUpEvent>(guessButtonStateChangers[i].OnPointerUp);
@@ -246,8 +257,9 @@ public class GamePlayPage : Page
             return;
 
         VisualElement button    = evt.currentTarget as VisualElement;
+        int bscIndex            = (int)button.userData;
 
-        if (guessButtonStateChangers[(int)button.userData].Ignore)
+        if (guessButtonStateChangers[bscIndex].Ignore)
             return;
 
         processingGuess         = ButtonSubmitted(button, button.Q<VisualElement>("BG"));

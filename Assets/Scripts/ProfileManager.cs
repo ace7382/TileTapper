@@ -153,6 +153,8 @@ public class ProfileManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
 
+        Screen.orientation = ScreenOrientation.Portrait;
+
         if (!LoadGame())
             saveData = new SaveFile();
     }

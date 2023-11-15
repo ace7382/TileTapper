@@ -37,6 +37,7 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        bgSource.loop = true;
         bgSource.PlayOneShot(bgMusic);
     }
 
