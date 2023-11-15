@@ -64,6 +64,8 @@ public class ProfileManager : MonoBehaviour
 
     private SaveFile                saveData;
 
+    private bool                    syncingGameCenter       = false;
+
     #endregion
 
     #region Public Properties
@@ -159,7 +161,7 @@ public class ProfileManager : MonoBehaviour
             saveData = new SaveFile();
     }
 
-    private async Task Start()
+    private void Start()
     {
         //This is set here (instead of in load) because the UI will be linked at this point
         CurrentStreak   = saveData.Current;
@@ -167,25 +169,25 @@ public class ProfileManager : MonoBehaviour
         CorrectCount    = saveData.Correct;
         IncorrectCount  = saveData.Incorrect;
 
-        try
-        {
-            gameKit_playerProfile = await GKLocalPlayer.Authenticate();
+        //try
+        //{
+        //    gameKit_playerProfile = await GKLocalPlayer.Authenticate();
 
-            Debug.Log("$$$$$$$Done Authenticating");
+        //    Debug.Log("$$$$$$$Done Authenticating");
 
-            if (gameKit_playerProfile != null)
-            {
-                GKAccessPoint.Shared.Location = GKAccessPoint.GKAccessPointLocation.TopLeading;
-                GKAccessPoint.Shared.IsActive = true;
+        //    if (gameKit_playerProfile != null)
+        //    {
+        //        GKAccessPoint.Shared.Location = GKAccessPoint.GKAccessPointLocation.TopLeading;
+        //        GKAccessPoint.Shared.IsActive = true;
 
-                await CheckAchievementProgress();
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log("$$$$$$$$$RIP");
-            Debug.Log(e.Message);
-        }
+        //        await CheckAchievementProgress();
+        //    }
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.Log("$$$$$$$$$RIP");
+        //    Debug.Log(e.Message);
+        //}
     }
 
     #endregion
@@ -233,9 +235,56 @@ public class ProfileManager : MonoBehaviour
         SaveGame();
     }
 
+    public void AttemptGCSignIn()
+    {
+        if (syncingGameCenter == true)
+            return;
+
+        syncingGameCenter = true;
+
+        Task.Run(() => SignIntoGameCenter())
+            .ContinueWith((na) =>
+            {
+                syncingGameCenter = false;
+            });
+    }
+
     #endregion
 
     #region Private Functions
+
+    private async Task SignIntoGameCenter()
+    {
+        GamePlayPage gamePage = PageManager.instance.GetFirstPageOfType<GamePlayPage>();
+
+        if (gameKit_playerProfile == null) //Not already logged in
+        {
+            try
+            {
+                gamePage.ShowNotification("Logging into GameCenter...");
+
+                gameKit_playerProfile = await GKLocalPlayer.Authenticate();
+            }
+            catch
+            {
+                gamePage.ShowNotification("Error logging into GameCenter...");
+            }
+        }
+
+        if (gameKit_playerProfile != null)
+        {
+            gamePage.ShowNotification("Syncing Achievements...");
+
+            GKAccessPoint.Shared.Location = GKAccessPoint.GKAccessPointLocation.TopLeading;
+            GKAccessPoint.Shared.IsActive = true;
+
+            await CheckAchievementProgress();
+        }
+
+        await Task.Delay(new TimeSpan(0, 0, 2));
+
+        gamePage.HideNotification();
+    }
 
     private void SaveGame()
     {
@@ -274,12 +323,6 @@ public class ProfileManager : MonoBehaviour
 
     private async Task CheckAchievementProgress()
     {
-        //Debug.Log("$$$$$$$$$$$Here. Waiting 6s....");
-
-        //await Task.Delay(new TimeSpan(0, 0, 6));
-
-        //Debug.Log("$$$$$$$$$$Wait complete");
-
         var achievements = await GKAchievement.LoadAchievements();
 
         for (int i = 0; i < achievements.Count; i++)
@@ -287,6 +330,8 @@ public class ProfileManager : MonoBehaviour
             if (achievements[i].IsCompleted)
                 ObjectiveManager.instance.UpdateObjectivesBasedOnGKAchievements(achievements[i]);
         }
+
+        await ObjectiveManager.instance.CheckAllGameCenterAchievments();
     }
 
     #endregion

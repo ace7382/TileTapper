@@ -51,6 +51,7 @@
                     <ui:VisualElement name="BG" style="flex-grow: 1; background-color: rgb(255, 255, 255); border-top-left-radius: 25px; border-bottom-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:Label tabindex="-1" text="Logging into GameCenter..." display-tooltip-when-elided="true" name="Notification" enable-rich-text="false" style="-unity-font: url(&apos;project://database/Assets/UI/Quicksand-Bold.ttf?fileID=12800000&amp;guid=b1e2f9316ab78465a9767471cb4244f6&amp;type=3#Quicksand-Bold&apos;); font-size: 40px; -unity-font-definition: initial; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; position: absolute; top: -60px; width: 800px; max-width: 800px; min-width: 800px; align-self: center; -unity-text-align: upper-center; bottom: auto;" />
         </ui:VisualElement>
         <ui:VisualElement name="StatsPanel" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); width: 100%; max-width: 100%; min-width: 100%; align-items: center;">
             <ui:VisualElement name="Current" style="flex-grow: 1; flex-direction: row; justify-content: space-between; min-width: 90%; min-height: auto; width: 90%; max-width: 90%;">
@@ -89,7 +90,7 @@
             <ui:VisualElement name="GameCenterButton" style="height: 150px; max-height: 150px; min-height: 150px; width: 150px; max-width: 150px; min-width: 150px;">
                 <ui:VisualElement name="Shadow" style="background-color: rgba(77, 77, 77, 0.35); position: absolute; min-width: 100%; bottom: -7px; height: 100%; max-height: 100%; min-height: 100%; right: -7px; border-top-left-radius: 1000px; border-bottom-left-radius: 1000px; border-top-right-radius: 1000px; border-bottom-right-radius: 1000px; flex-grow: 1;" />
                 <ui:VisualElement name="BG" style="flex-grow: 1; background-color: rgb(255, 255, 255); border-top-left-radius: 1000px; border-bottom-left-radius: 1000px; border-top-right-radius: 1000px; border-bottom-right-radius: 1000px;">
-                    <ui:VisualElement name="Icon" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/Pictoicon_music_on.png?fileID=2800000&amp;guid=cbc65e37675d041a4885c723d4308380&amp;type=3#Pictoicon_music_on&apos;); -unity-background-image-tint-color: rgb(149, 149, 149); margin-top: 30px; margin-right: 30px; margin-bottom: 30px; margin-left: 30px;" />
+                    <ui:VisualElement name="Icon" style="flex-grow: 1; background-image: url(&apos;project://database/Assets/gamecenter.png?fileID=2800000&amp;guid=97d317369cc2d4a3788f46fe1d7af5af&amp;type=3#gamecenter&apos;); -unity-background-image-tint-color: rgb(149, 149, 149); margin-top: 30px; margin-right: 30px; margin-bottom: 30px; margin-left: 30px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

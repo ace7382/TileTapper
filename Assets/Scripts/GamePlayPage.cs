@@ -34,6 +34,8 @@ public class GamePlayPage : Page
     private ButtonStateChanger          sfxButtonStateChanger;
     private ButtonStateChanger          gameCenterButtonStateChanger;
 
+    private Label                       notificationLabel;
+
     #endregion
 
     #region Inherited Functions
@@ -71,6 +73,20 @@ public class GamePlayPage : Page
     public override void ShowPage(object[] args)
     {
         
+    }
+
+    #endregion
+
+    #region Public Functions
+
+    public void ShowNotification(string notif)
+    {
+        PageManager.instance.ChangeAsyncUpdater(notificationLabel, notif);
+    }
+
+    public void HideNotification()
+    {
+        PageManager.instance.ChangeAsyncUpdater(notificationLabel, "");
     }
 
     #endregion
@@ -131,6 +147,11 @@ public class GamePlayPage : Page
         Label instructions              = p.Q<Label>("Instructions");
         instructions.RegisterCallback<ClickEvent>(ObjectiveManager.instance.InstructionsTapped);
 
+        //Notif
+        notificationLabel               = p.Q<Label>("Notification");
+        notificationLabel.text          = "";
+        PageManager.instance.RegisterAsyncUpdater(notificationLabel);
+
         //Bottom Buttons
         sfxButton                       = p.Q<VisualElement>("SFXButton");
         musicButton                     = p.Q<VisualElement>("MusicButton");
@@ -159,6 +180,12 @@ public class GamePlayPage : Page
         musicButton.RegisterCallback<ClickEvent>((evt) =>
         {
             musicButton.Q<VisualElement>("Icon").SetImage(SoundManager.instance.ToggleMusic());
+        });
+
+        gameCenterButton.RegisterCallback<ClickEvent>((evt) =>
+        {
+            ShowNotification("Signing into GameCenter...");
+            ProfileManager.instance.AttemptGCSignIn();
         });
     }
 

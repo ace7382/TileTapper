@@ -28,6 +28,8 @@ public class PageManager : MonoBehaviour
     private SimplePool<GameObject>                  GOPages;
     private OrderedDictionary                       stack; //Key: Page, Value: GameObject
 
+    private Dictionary<Label, string>               asyncUpdates;
+
     #endregion
 
     #region Public Properties
@@ -50,6 +52,8 @@ public class PageManager : MonoBehaviour
         GOPages         = new SimplePool<GameObject>(blankPagePrefab);
         GOPages.OnPush  = (item) => { item.SetActive(false); };
         GOPages.Populate(1);
+
+        asyncUpdates    = new Dictionary<Label, string>();
     }
 
     private void Start()
@@ -57,9 +61,35 @@ public class PageManager : MonoBehaviour
         StartCoroutine(OpenPageOnAnEmptyStack<GamePlayPage>());
     }
 
+    private void Update()
+    {
+        //This is needed because async functions cannot update the UI since they are not on the main thread
+        foreach (KeyValuePair<Label, string> pair in asyncUpdates)
+        {
+            if (pair.Key.text != pair.Value)
+                pair.Key.text = pair.Value;
+        }
+    }
+
     #endregion
 
     #region Public Functions
+
+    public void RegisterAsyncUpdater(Label l)
+    {
+        if (asyncUpdates.ContainsKey(l))
+            return;
+
+        asyncUpdates.Add(l, l.text);
+    }
+
+    public void ChangeAsyncUpdater(Label l, string newText)
+    {
+        if (!asyncUpdates.ContainsKey(l))
+            return;
+
+        asyncUpdates[l] = newText;
+    }
 
     public IEnumerator CloseTopPage(bool animateOut = true, bool executeHideCall = true)
     {
@@ -148,6 +178,16 @@ public class PageManager : MonoBehaviour
         if (animateIn) yield return pageToAdd.AnimateIn();
     }
 
+    public T GetFirstPageOfType<T>() where T : Page
+    {
+        foreach (Page p in stack.Keys)
+        {
+            if (p is T)
+                return p as T;
+        }
+
+        return null;
+    }
     #endregion
 
     #region Private Functions
