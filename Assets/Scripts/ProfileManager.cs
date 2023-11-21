@@ -273,6 +273,8 @@ public class ProfileManager : MonoBehaviour
 
         if (gameKit_playerProfile != null)
         {
+            //await GKAchievement.ResetAchievements();
+
             gamePage.ShowNotification("Syncing Achievements...");
 
             GKAccessPoint.Shared.Location = GKAccessPoint.GKAccessPointLocation.TopLeading;

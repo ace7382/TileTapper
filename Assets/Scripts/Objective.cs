@@ -17,7 +17,7 @@ public abstract class Objective : ScriptableObject
 
     #region Private Variables
 
-    [SerializeField] private bool isComplete = false; //TODO: Remove serialization; just for debug
+    private bool                                isComplete      = false;
 
     #endregion
 

@@ -57,6 +57,8 @@ public class GamePlayPage : Page
         PageManager.instance.StartCoroutine(NoTapsFor3Minutes());
         PageManager.instance.StartCoroutine(PlayTimer());
 
+        AdManager.instance.LoadBanner();
+        
         return null;
     }
 
@@ -117,7 +119,7 @@ public class GamePlayPage : Page
             , uiDoc.rootVisualElement.Q<Label>("IncorrectGuesses")
         );
 
-        VisualElement p                 = uiDoc.rootVisualElement.Q<VisualElement>("Page"); //TODO: move this to the top and any uidoc.root refs can probably be p refs
+        VisualElement p                 = uiDoc.rootVisualElement.Q<VisualElement>("Page"); 
 
         for (int i = 0; i < guessButtons.Count; i++)
         {
